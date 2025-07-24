@@ -1,0 +1,17 @@
+def spam_probability(total_emails, emails_with_free, spam_emails, spam_and_free):
+    """
+    Calculate P(Spam | Free) using Bayes' Theorem
+    
+    Formula: P(Spam | Free) = P(Free | Spam) × P(Spam) / P(Free)
+    """
+    p_spam = spam_emails / total_emails
+    p_free = emails_with_free / total_emails  
+    p_free_given_spam = spam_and_free / spam_emails
+    
+    p_spam_given_free = (p_free_given_spam * p_spam) / p_free
+    
+    print(f"P(Spam | Free) = {p_spam_given_free:.4f} = {p_spam_given_free*100:.2f}%")
+    return p_spam_given_free
+
+# Example usage
+spam_probability(1000, 300, 400, 120)
