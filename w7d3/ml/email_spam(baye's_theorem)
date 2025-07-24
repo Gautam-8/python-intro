@@ -13,5 +13,4 @@ def spam_probability(total_emails, emails_with_free, spam_emails, spam_and_free)
     print(f"P(Spam | Free) = {p_spam_given_free:.4f} = {p_spam_given_free*100:.2f}%")
     return p_spam_given_free
 
-# Example usage
 spam_probability(1000, 300, 400, 120)
