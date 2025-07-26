@@ -1,0 +1,157 @@
+from datetime import datetime, timedelta
+
+
+class Vehicle:
+
+    def __init__(self, vehicle_id, make, model, year, daily_rate, mileage=0, fuel_type='Gasoline'):
+        self.vehicle_id = vehicle_id
+        self.make = make
+        self.model = model
+        self.year = year
+        self.daily_rate = daily_rate
+        self.is_available = True
+        self.mileage = mileage
+        self.fuel_type = fuel_type
+
+    def rent(self):
+        if not self.is_available:
+            return "Vehicle is currently unavailable."
+        self.is_available = False
+        return f"{self.make} {self.model} rented successfully."
+
+    def return_vehicle(self):
+        self.is_available = True
+        return f"{self.make} {self.model} returned successfully."
+
+    def calculate_rental_cost(self, days):
+        return self.daily_rate * days
+
+    def get_vehicle_info(self):
+        return f"{self.year} {self.make} {self.model}, Daily Rate: ${self.daily_rate}, Available: {self.is_available}"
+    
+    def get_fuel_efficiency(self):
+        if self.fuel_type == 'Gasoline':
+            return {'city_mpg': 25, 'highway_mpg': 30}
+    
+class Car(Vehicle):
+
+    def __init__(self, vehicle_id, make, model, year, daily_rate, seating_capacity, transmission_type, has_gps=False):
+        super().__init__(vehicle_id, make, model, year, daily_rate)
+        self.seating_capacity = seating_capacity
+        self.transmission_type = transmission_type
+        self.has_gps = has_gps
+
+    def calculate_rental_cost(self, days):
+        cost = super().calculate_rental_cost(days)
+        if self.transmission_type == 'Automatic':
+            return cost  # 10% more for automatic
+        return cost
+
+    def get_vehicle_info(self):
+        info = super().get_vehicle_info()
+        return f"{info}, Seating Capacity: {self.seating_capacity}, Transmission: {self.transmission_type}, GPS: {self.has_gps}"
+    
+    def get_fuel_efficiency(self):
+        efficiency = super().get_fuel_efficiency()
+        if self.transmission_type == 'Automatic':
+            efficiency['city_mpg'] -= 2
+    
+class Motorcycle(Vehicle):
+
+    def __init__(self, vehicle_id, make, model, year, daily_rate, engine_cc, bike_type):
+        super().__init__(vehicle_id, make, model, year, daily_rate)
+        self.engine_cc = engine_cc
+        self.bike_type = bike_type  # e.g., Sport, Cruiser, Touring
+
+    def calculate_rental_cost(self, days):
+        cost = super().calculate_rental_cost(days)
+        if days < 7:  # Short rental discount
+            return cost * 0.8  # 20% discount for rentals less than a week
+        return cost
+
+    def get_vehicle_info(self):
+        info = super().get_vehicle_info()
+        return f"{info}, Engine CC: {self.engine_cc}, Bike Type: {self.bike_type}"
+    
+    def get_fuel_efficiency(self):
+        return 50
+    
+
+class Truck(Vehicle):
+
+    def __init__(self, vehicle_id, make, model, year, daily_rate, cargo_capacity, license_required, max_weight):
+        super().__init__(vehicle_id, make, model, year, daily_rate)
+        self.cargo_capacity = cargo_capacity  # in kg
+        self.license_required = license_required  # e.g., CDL-A
+        self.max_weight = max_weight  # in kg
+
+    def calculate_rental_cost(self, days):
+        cost = super().calculate_rental_cost(days)
+        return cost * 1.5  # 50% surcharge for commercial vehicles
+
+    def get_vehicle_info(self):
+        info = super().get_vehicle_info()
+        return f"{info}, Cargo Capacity: {self.cargo_capacity}kg, License Required: {self.license_required}, Max Weight: {self.max_weight}kg"
+
+# Test Case 1: Basic vehicle creation and inheritance
+car = Car("CAR001", "Toyota", "Camry", 2023, 45.0, 5, "Automatic", True)
+motorcycle = Motorcycle("BIKE001", "Harley", "Street 750", 2022, 35.0, 750, "Cruiser")
+truck = Truck("TRUCK001", "Ford", "F-150", 2023, 85.0, 1200, "CDL-A", 5000)
+
+assert car.seating_capacity == 5
+assert motorcycle.engine_cc == 750
+assert truck.cargo_capacity == 1200
+
+# Test Case 2: Vehicle availability and rental logic
+assert car.is_available == True
+rental_result = car.rent()
+assert car.is_available == False
+assert "rented successfully" in rental_result.lower()
+
+return_result = car.return_vehicle()
+assert car.is_available == True
+
+# Test Case 3: Type-specific rental calculations
+# Car: base rate
+car_cost = car.calculate_rental_cost(3)
+assert car_cost == 45.0 * 3  # Standard calculation
+
+# Motorcycle: 20% discount for short rentals (<7 days)
+bike_cost = motorcycle.calculate_rental_cost(5)
+expected_bike = 35.0 * 5 * 0.8  # 20% discount
+assert abs(bike_cost - expected_bike) < 0.01
+
+# Truck: 50% surcharge for commercial vehicle
+truck_cost = truck.calculate_rental_cost(2)
+expected_truck = 85.0 * 2 * 1.5  # 50% surcharge
+assert abs(truck_cost - expected_truck) < 0.01
+
+# Test Case 4: Polymorphism - treating all vehicles uniformly
+vehicles = [car, motorcycle, truck]
+total_fleet_value = 0
+for vehicle in vehicles:
+    info = vehicle.get_vehicle_info()
+    assert vehicle.make in info
+    assert vehicle.model in info
+    if hasattr(vehicle, 'seating_capacity'):
+        assert str(vehicle.seating_capacity) in info
+    elif hasattr(vehicle, 'engine_cc'):
+        assert str(vehicle.engine_cc) in info
+
+# Test Case 5: Fuel efficiency calculations (method overriding)
+# Cars: city/highway mpg based on transmission
+car_efficiency = car.get_fuel_efficiency()
+assert isinstance({ 'car_efficiency' : car_efficiency}, dict)
+assert 'city_mpg' in car_efficiency
+assert 'highway_mpg' in car_efficiency
+
+# Motorcycles: single mpg value
+bike_efficiency = motorcycle.get_fuel_efficiency()
+assert isinstance(bike_efficiency, (int, float))
+assert bike_efficiency > 40  # Motorcycles typically more efficient
+
+# Trucks: mpg varies by load capacity
+truck_efficiency = truck.get_fuel_efficiency()
+assert isinstance(truck_efficiency, dict)
+assert 'empty_mpg' in truck_efficiency
+assert 'loaded_mpg' in truck_efficiency
