@@ -46,7 +46,6 @@ class RiskManagement:
         return "Low"
 
     def calculate_position_size(self, asset, price):
-        # Use 10% of balance for each position as a simple rule
         if hasattr(self, 'balance'):
             position_value = self.balance * 0.1
             return int(position_value // price)
@@ -54,11 +53,9 @@ class RiskManagement:
 
 class AnalyticsEngine:
     def analyze_market_trend(self, asset):
-        # Dummy implementation
         return {"trend": "upward", "confidence": 0.85}
 
     def performance_metrics(self, price_lookup):
-        # Calculate total value and return
         if hasattr(self, 'get_portfolio_value'):
             value = self.get_portfolio_value(price_lookup)
             return {"total_value": value}
@@ -88,7 +85,6 @@ class StockTrader(TradingAccount, RiskManagement, AnalyticsEngine):
         return f"Executed trade for {quantity} shares of {asset} at ${price}"
 
     def performance_metrics(self, price_lookup):
-        # Override to add stock-specific metrics
         metrics = super().performance_metrics(price_lookup)
         metrics["type"] = "stock"
         return metrics
@@ -113,23 +109,20 @@ class CryptoTrader(TradingAccount, RiskManagement, NotificationSystem):
 class ProfessionalTrader(StockTrader, CryptoTrader):
     def __init__(self, account_id, account_holder, balance=0.0):
         StockTrader.__init__(self, account_id, account_holder, balance)
-        NotificationSystem.__init__(self)  # Needed for NotificationSystem part
+        NotificationSystem.__init__(self) 
 
     def execute_diversified_strategy(self, strategy, price_lookup):
-        # strategy: dict with keys 'stocks', 'crypto', 'allocation'
         stocks = strategy.get("stocks", [])
         cryptos = strategy.get("crypto", [])
         allocation = strategy.get("allocation", {"stocks": 0.5, "crypto": 0.5})
         total_balance = self.get_balance()
         results = []
-        # Allocate and buy stocks
         stock_funds = total_balance * allocation.get("stocks", 0.5)
         for asset in stocks:
             price = price_lookup.get(asset, 100)
             qty = int(stock_funds // (len(stocks) * price))
             if qty > 0:
                 results.append(self.execute_trade(asset, qty, price))
-        # Allocate and buy crypto
         crypto_funds = total_balance * allocation.get("crypto", 0.5)
         for asset in cryptos:
             price = price_lookup.get(asset, 1000)

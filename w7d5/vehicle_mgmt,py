@@ -44,7 +44,7 @@ class Car(Vehicle):
     def calculate_rental_cost(self, days):
         cost = super().calculate_rental_cost(days)
         if self.transmission_type == 'Automatic':
-            return cost  # 10% more for automatic
+            return cost 
         return cost
 
     def get_vehicle_info(self):
@@ -61,12 +61,12 @@ class Motorcycle(Vehicle):
     def __init__(self, vehicle_id, make, model, year, daily_rate, engine_cc, bike_type):
         super().__init__(vehicle_id, make, model, year, daily_rate)
         self.engine_cc = engine_cc
-        self.bike_type = bike_type  # e.g., Sport, Cruiser, Touring
+        self.bike_type = bike_type  
 
     def calculate_rental_cost(self, days):
         cost = super().calculate_rental_cost(days)
-        if days < 7:  # Short rental discount
-            return cost * 0.8  # 20% discount for rentals less than a week
+        if days < 7:  
+            return cost * 0.8  
         return cost
 
     def get_vehicle_info(self):
@@ -81,19 +81,18 @@ class Truck(Vehicle):
 
     def __init__(self, vehicle_id, make, model, year, daily_rate, cargo_capacity, license_required, max_weight):
         super().__init__(vehicle_id, make, model, year, daily_rate)
-        self.cargo_capacity = cargo_capacity  # in kg
-        self.license_required = license_required  # e.g., CDL-A
-        self.max_weight = max_weight  # in kg
+        self.cargo_capacity = cargo_capacity 
+        self.license_required = license_required 
+        self.max_weight = max_weight 
 
     def calculate_rental_cost(self, days):
         cost = super().calculate_rental_cost(days)
-        return cost * 1.5  # 50% surcharge for commercial vehicles
+        return cost * 1.5 
 
     def get_vehicle_info(self):
         info = super().get_vehicle_info()
         return f"{info}, Cargo Capacity: {self.cargo_capacity}kg, License Required: {self.license_required}, Max Weight: {self.max_weight}kg"
 
-# Test Case 1: Basic vehicle creation and inheritance
 car = Car("CAR001", "Toyota", "Camry", 2023, 45.0, 5, "Automatic", True)
 motorcycle = Motorcycle("BIKE001", "Harley", "Street 750", 2022, 35.0, 750, "Cruiser")
 truck = Truck("TRUCK001", "Ford", "F-150", 2023, 85.0, 1200, "CDL-A", 5000)
