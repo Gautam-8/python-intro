@@ -1,0 +1,48 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+.venv/
+venv/
+ENV/
+env/
+
+# macOS system files
+.DS_Store
+
+# VSCode settings (optional)
+.vscode/
+
+# PyCharm settings (optional)
+.idea/
+
+# Logs and local runtime files
+*.log
+*.sqlite3
+*.db
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.nox/
+.coverage
+coverage.xml
+*.cover
+.cache
+pytest_cache/
+
+# FastAPI static/docs
+static/
+
+# MyPy
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# Pydantic compiled models
+*.pydantic.json
+
+# Other
+*.zip
