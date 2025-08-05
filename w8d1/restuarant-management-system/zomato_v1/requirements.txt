@@ -1,0 +1,6 @@
+# This file lists all dependencies for the project
+fastapi
+uvicorn[standard]
+sqlalchemy[asyncio]
+aiosqlite
+pydantic
