@@ -1,0 +1,12 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "type": "shell",
+      "label": "Create venv and install requirements",
+      "command": "python -m venv venv; .\\venv\\Scripts\\activate; pip install -r requirements.txt",
+      "group": "build",
+      "isBackground": false
+    }
+  ]
+}
